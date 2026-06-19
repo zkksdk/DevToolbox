@@ -1,0 +1,7 @@
+﻿Priority,Chain,Funding,Stage,Potential,Est. Value,Wallet,Balance,Faucet,Actions Needed,Last Interaction,Notes
+1,Monad,$225M,Testnet,HIGH,$500-$5000,0x1485c6A111E4A522eF7AA9708643739bFf23bcA2,0,https://testnet.monad.xyz/faucet,"Swap on Kuru, bridge, mint NFT, daily tx",2026-06-19,Zero capital strategy
+2,Linea,$725M (ConsenSys),Mainnet (LXP tracking),HIGH,$300-$3000,0x1485c6A111E4A522eF7AA9708643739bFf23bcA2,0,https://www.infura.io/faucet/linea,"Bridge to Linea, use DApps, swap, provide liquidity",2026-06-19,Zero capital strategy
+3,Scroll,$80M,Mainnet (Marks tracking),MEDIUM,$100-$1000,0x1485c6A111E4A522eF7AA9708643739bFf23bcA2,0,https://faucet.quicknode.com/scroll/sepolia,"Bridge, swap, mint, deploy contract",2026-06-19,Zero capital strategy
+4,Base,Coinbase,Mainnet (ongoing rounds),MEDIUM,$50-$500,0x1485c6A111E4A522eF7AA9708643739bFf23bcA2,0,https://www.alchemy.com/faucets/base-sepolia,"Bridge ETH, swap on Aerodrome, mint NFTs",2026-06-19,Zero capital strategy
+5,MegaETH,$20M+,Testnet,MEDIUM-HIGH,$100-$2000,0x1485c6A111E4A522eF7AA9708643739bFf23bcA2,0,https://carrot.megaeth.com/faucet,"Daily faucet, swap, interact with DApps",2026-06-19,Zero capital strategy
+6,Arbitrum,$123M,Mainnet (ongoing ecosystem),LOW-MEDIUM,$50-$300,0x1485c6A111E4A522eF7AA9708643739bFf23bcA2,0,https://www.alchemy.com/faucets/arbitrum-sepolia,"Bridge, swap on GMX/Camelot, LP",2026-06-19,Zero capital strategy
