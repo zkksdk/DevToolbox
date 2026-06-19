@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevToolbox - Free Online Developer Tools</title>
-<meta name="description" content="Free online developer tools: JSON formatter, Base64 encode/decode, JWT debugger, timestamp converter, QR generator, and more. No ads, no signup, works offline.">
+<title>DevToolbox - Free Online Developer Tools | JSON Formatter, Base64, JWT, QR Code</title>
+<meta name="description" content="Free online developer tools: JSON formatter/validator, Base64 encoder/decoder, JWT debugger, QR code generator, password generator, UUID generator, timestamp converter, and more. No signup required, works in your browser.">
+<meta name="keywords" content="json formatter, base64 decode, jwt debugger, qr code generator, password generator, uuid generator, timestamp converter, developer tools, online tools, free tools">
+<meta name="robots" content="index, follow">
+<meta name="author" content="DevToolbox">
+<link rel="canonical" href="https://zkksdk.github.io/DevToolbox/">
+<meta property="og:title" content="DevToolbox - Free Online Developer Tools">
+<meta property="og:description" content="JSON formatter, Base64 encoder, JWT debugger, QR generator, password generator and more. Free, no signup.">
+<meta property="og:url" content="https://zkksdk.github.io/DevToolbox/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DevToolbox - Free Online Developer Tools">
+<meta name="twitter:description" content="JSON formatter, Base64 encoder, JWT debugger, QR generator, password generator and more.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DevToolbox",
+  "url": "https://zkksdk.github.io/DevToolbox/",
+  "description": "Free online developer tools including JSON formatter, Base64 encoder, JWT debugger, QR code generator, and more.",
+  "applicationCategory": "DeveloperApplication",
+  "offers": {"@type": "Offer", "price": "0"}
+}
+</script>
 <style>
 :root {
   --bg: #0d1117;
@@ -80,14 +102,18 @@ footer a{color:var(--accent);text-decoration:none}
   <button data-tool="base64">Base64 Encode/Decode</button>
   <button data-tool="url">URL Encode/Decode</button>
   <button data-tool="jwt">JWT Debugger</button>
+  <button data-tool="htmlfmt">HTML Formatter</button>
   <div class="cat">Generators</div>
   <button data-tool="qrcode">QR Code Generator</button>
   <button data-tool="password">Password Generator</button>
   <button data-tool="uuid">UUID Generator</button>
+  <button data-tool="lorem">Lorem Ipsum Generator</button>
   <div class="cat">Converters</div>
   <button data-tool="timestamp">Timestamp Converter</button>
   <button data-tool="color">Color Converter</button>
   <button data-tool="markdown">Markdown Preview</button>
+  <div class="cat">Testers</div>
+  <button data-tool="regex">Regex Tester</button>
 </nav>
 
 <main class="main" id="main"></main>
@@ -429,6 +455,105 @@ const tools = {
           out.innerHTML = marked.parse(inp.value);
         }
       });
+    }
+  },
+  htmlfmt: {
+    title: 'HTML Formatter',
+    desc: 'Format and indent HTML code.',
+    render(h) {
+      return `
+        <div class="io-row">
+          <div class="io-col"><label>Input</label><textarea id="html-in" placeholder="<div><p>Hello</p></div>" style="min-height:200px"></textarea></div>
+          <div class="io-col"><label>Formatted</label><textarea id="html-out" readonly style="min-height:200px"></textarea></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="tools.htmlfmt.format()">Format</button>
+          <button class="btn btn-secondary" onclick="tools.htmlfmt.minify()">Minify</button>
+          <button class="btn btn-danger" onclick="tools.htmlfmt.clear()">Clear</button>
+        </div>
+      `;
+    },
+    format(){
+      const html = document.getElementById('html-in').value;
+      let indent=0, out='';
+      html.replace(/<[^>]+>/g, m=>{
+        if(m.startsWith('</')) indent--;
+        out += '  '.repeat(Math.max(0,indent)) + m + '\n';
+        if(!m.startsWith('</') && !m.endsWith('/>') && !['<br','<hr','<img','<input','<meta','<link'].some(t=>m.startsWith(t))) indent++;
+        return m;
+      });
+      document.getElementById('html-out').value = out.trim();
+    },
+    minify(){ document.getElementById('html-out').value = document.getElementById('html-in').value.replace(/>\\s+</g,'><').trim(); },
+    clear(){ document.getElementById('html-in').value=''; document.getElementById('html-out').value=''; }
+  },
+  lorem: {
+    title: 'Lorem Ipsum Generator',
+    desc: 'Generate placeholder text for designs and mockups.',
+    render(h) {
+      const ipsum = "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum".split(' ');
+      return `
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="tools.lorem.gen(1)">1 Paragraph</button>
+          <button class="btn btn-secondary" onclick="tools.lorem.gen(3)">3 Paragraphs</button>
+          <button class="btn btn-secondary" onclick="tools.lorem.gen(5)">5 Paragraphs</button>
+          <button class="btn btn-secondary" onclick="tools.lorem.gen(10)">10 Paragraphs</button>
+          <button class="btn btn-danger" onclick="tools.lorem.clear()">Clear</button>
+        </div>
+        <div id="lorem-out" style="line-height:1.8;color:var(--text)"></div>
+      `;
+    },
+    gen(n){
+      const words = "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum".split(' ');
+      let out = '';
+      for(let p=0;p<n;p++){
+        const len = 30 + Math.floor(Math.random()*40);
+        const s = []; for(let i=0;i<len;i++) s.push(words[Math.floor(Math.random()*words.length)]);
+        let text = s.join(' ').toLowerCase();
+        text = text.charAt(0).toUpperCase() + text.slice(1) + '.';
+        out += '<p style="margin-bottom:12px">' + text + '</p>';
+      }
+      document.getElementById('lorem-out').innerHTML = out;
+    },
+    clear(){ document.getElementById('lorem-out').innerHTML=''; }
+  },
+  regex: {
+    title: 'Regex Tester',
+    desc: 'Test regular expressions with real-time matching.',
+    render(h) {
+      return `
+        <div class="io-col"><label>Regular Expression</label>
+          <div style="display:flex;gap:8px"><span style="font-size:20px;color:var(--muted);padding-top:6px">/</span><input type="text" id="regex-pat" placeholder="\\d{3}-\\d{4}" style="flex:1"><span style="font-size:20px;color:var(--muted);padding-top:6px">/</span>
+            <select id="regex-flags" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);padding:6px">
+              <option value="">none</option><option value="g">g</option><option value="i">i</option><option value="gi">gi</option><option value="m">m</option><option value="gm">gm</option>
+            </select>
+          </div>
+        </div>
+        <div class="io-col" style="margin-top:12px"><label>Test String</label><textarea id="regex-str" placeholder="Phone: 123-4567, Fax: 890-1234" style="min-height:100px"></textarea></div>
+        <div class="io-col" style="margin-top:12px"><label>Result</label><div id="regex-out" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;min-height:60px;font-family:monospace;font-size:14px;white-space:pre-wrap"></div></div>
+      `;
+    },
+    init(){
+      ['regex-pat','regex-str','regex-flags'].forEach(id=>{
+        const el=document.getElementById(id); if(!el) return;
+        el.addEventListener('input', tools.regex.test);
+        el.addEventListener('change', tools.regex.test);
+      });
+    },
+    test(){
+      const pat = document.getElementById('regex-pat').value, str = document.getElementById('regex-str').value, flags = document.getElementById('regex-flags').value;
+      if(!pat){ document.getElementById('regex-out').innerHTML='<span style="color:var(--muted)">Enter a regex pattern</span>'; return; }
+      try{
+        const re = new RegExp(pat, flags);
+        const matches = str.match(re);
+        if(matches){
+          document.getElementById('regex-out').innerHTML = '<span style="color:var(--green)">Match!</span>\nMatches: ' + JSON.stringify(matches, null, 2);
+        } else {
+          document.getElementById('regex-out').innerHTML = '<span style="color:var(--red)">No match</span>';
+        }
+      }catch(e){
+        document.getElementById('regex-out').innerHTML = '<span style="color:var(--red)">Invalid regex: ' + e.message + '</span>';
+      }
     }
   }
 };
